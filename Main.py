@@ -1,0 +1,54 @@
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+from pprint import pprint
+import numpy as np
+import Constants
+
+spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=Constants.cid,
+                                               client_secret=Constants.secret,
+                                               redirect_uri=Constants.redirect_uri,
+                                               scope=Constants.scope))
+
+def create_new_playlist(tracks, playlist_name):
+    new_playlist = spotify.user_playlist_create('mckeoghn', 'Slaylistified ' + playlist_name)
+    playlist_id = new_playlist['id']
+    spotify.playlist_add_items(playlist_id, tracks)
+
+def get_track_info(track_id):
+    track = spotify.audio_analysis(track_id)
+    return track['track']['tempo']
+
+def get_playlist_bpms(playlist_id):
+    playlist_songs = spotify.playlist_items(playlist_id=playlist_id)
+    s_names = []
+    for i in enumerate(playlist_songs['items']):
+        s_names.append([i[1]['track']['name'], i[1]['track']['id'], get_track_info(i[1]['track']['id'])])
+    return s_names
+
+def get_user_playlists():  # Get the users 100 newest playlists
+    playlists = spotify.current_user_playlists(limit=100, offset=0)
+    p_names = []
+    for i in enumerate(playlists['items']):
+        p_names.append([i[1]['name'], i[1]['id']])
+        # p_id.append(i[1]['id'])
+    # plist_name = playlists['items'][0]['name']
+    return p_names
+
+def main():
+    p_names = get_user_playlists()
+    for i in range(len(p_names)):
+        print(i+1, p_names[i][0])
+    print('\n')
+    playlist_input = int(input('What playlist do you want Slaylistified?'))
+
+    s_names = get_playlist_bpms(p_names[playlist_input-1][1])
+    s_names = sorted(s_names, key=lambda x: x[2])
+    pprint(s_names)
+    print('\n')
+    np_s_names = np.array(s_names)
+
+    create_new_playlist(np_s_names[:,1], p_names[playlist_input-1][0])
+
+
+if __name__ == '__main__':
+    main()
