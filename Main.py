@@ -34,7 +34,10 @@ def get_playlist_bpms(playlist_id):
     playlist_songs = get_playlist_tracks(playlist_id)
     s_names = []
     for i in enumerate(playlist_songs):
-        s_names.append([i[1]['track']['name'], i[1]['track']['id'], get_track_info(i[1]['track']['id'])])
+        try:  # Exception to skip Podcasts in playlists
+            s_names.append([i[1]['track']['name'], i[1]['track']['id'], get_track_info(i[1]['track']['id'])])
+        except spotipy.exceptions.SpotifyException:
+            pass
     return s_names
 
 
@@ -52,7 +55,6 @@ def main():
         print(i+1, p_names[i][0])
     print('\n')
     playlist_input = int(input('What playlist do you want Slaylistified?'))
-
     s_names = get_playlist_bpms(p_names[playlist_input-1][1])
     s_names = sorted(s_names, key=lambda x: x[2])
     pprint(s_names)
