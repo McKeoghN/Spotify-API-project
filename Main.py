@@ -16,11 +16,6 @@ def create_new_playlist(tracks, playlist_name):
     spotify.playlist_add_items(playlist_id, tracks)
 
 
-def get_track_info(track_id):
-    track = spotify.audio_analysis(track_id)
-    return track['track']['tempo']
-
-
 def get_playlist_tracks(playlist_id):
     results = spotify.playlist_items(playlist_id)
     tracks = results['items']
@@ -35,7 +30,8 @@ def get_playlist_bpms(playlist_id):
     s_names = []
     for i in enumerate(playlist_songs):
         try:  # Exception to skip Podcasts in playlists
-            s_names.append([i[1]['track']['name'], i[1]['track']['id'], get_track_info(i[1]['track']['id'])])
+            s_names.append([i[1]['track']['name'], i[1]['track']['id'],
+                            spotify.audio_analysis(i[1]['track']['id'])['track']['tempo']])
         except spotipy.exceptions.SpotifyException:
             pass
     return s_names
