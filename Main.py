@@ -7,8 +7,8 @@ import Constants
 
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=Constants.cid, \
                                                client_secret=Constants.secret, \
-                                               redirect_uri=Constants.redirect_uri, \
-                                               scope=Constants.scope))
+                                               redirect_uri='http://localhost:7777/callback', \
+                                               scope='playlist-modify-public'))
 
 
 def create_new_playlist(tracks, playlist_name):
