@@ -6,5 +6,7 @@ called Constants.py. Store this python file in the same folder that you save Mai
 You can generate a client id and client secret by following the instructions on this page: https://developer.spotify.com/documentation/web-api/concepts/apps
 
 Store the client id and client secret in this format in the Constants.py file:
+
 cid = '[client id from developers.spotify.com]'
+
 secret = '[client secret from developers.spotify.com]'
