@@ -12,8 +12,7 @@ spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=Constants.cid, \
 
 
 def create_new_playlist(tracks, playlist_name):
-    # Need to change it so my Spotify username isn't public
-    new_playlist = spotify.user_playlist_create('mckeoghn', 'Slaylistified ' + playlist_name)
+    new_playlist = spotify.user_playlist_create(Constants.username, 'Slaylistified ' + playlist_name)
     playlist_id = new_playlist['id']
     spotify.playlist_add_items(playlist_id, tracks)
 
@@ -69,6 +68,7 @@ def main():
         time.sleep(0.5)
         main()
     
+    s_names = get_playlist_bpms(p_names[playlist_input-1][1])
     s_names = sorted(s_names, key=lambda x: x[2])
     pprint(s_names)
     print('\n')
