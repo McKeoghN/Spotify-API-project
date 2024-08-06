@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from pprint import pprint
 import numpy as np
 import time
+import itertools
 import Constants
 
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=Constants.cid, \
@@ -48,8 +49,8 @@ def get_user_playlists():  # Get the users 100 newest playlists
 
 def main():
     p_names = get_user_playlists()
-    numPlaylists = len(p_names)
-    for i in range(numPlaylists):
+    num_playlists = len(p_names)
+    for i in range(num_playlists):
         print(i+1, p_names[i][0])
     print('\n')
 
@@ -63,7 +64,7 @@ def main():
         main()
 
     # Error handling for invalid integer inputs:
-    if playlist_input > numPlaylists or playlist_input <= 0:  
+    if playlist_input > num_playlists or playlist_input <= 0:  
         print("\nIncorrect input, try again.\n")
         time.sleep(0.5)
         main()
@@ -72,9 +73,36 @@ def main():
     s_names = sorted(s_names, key=lambda x: x[2])
     pprint(s_names)
     print('\n')
+
+    num_songs = len(s_names)
+    print("number of songs", num_songs)
+    num_peaks = num_songs%10
+    print("number of peaks", num_peaks)
+    peaks = s_names[-num_peaks:]
+    num_arrays = num_peaks * 2
+    arrays = []
+    for i in range(num_arrays):
+        arrays.append([])
+    j = 0
+    for i in range(num_songs - num_peaks):
+        arrays[j].append(s_names[i])
+        j += 1
+        if j == num_arrays:
+            j = 0
+    x = 0
+    print(peaks)
+    for i in range(num_peaks):
+        arrays[x].append(peaks[i])
+        arrays[x+1].reverse()
+        x += 2
+    s_names = []
+    for array in arrays:
+        s_names.extend(array)
+    # pprint(arrays)
+    pprint(s_names)
     np_s_names = np.array(s_names)
     create_new_playlist(np_s_names[:,1], p_names[playlist_input-1][0])
 
 
 if __name__ == '__main__':
-    main()
+    main() 

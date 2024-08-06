@@ -11,3 +11,6 @@ cid = '[client id from developers.spotify.com]'
 secret = '[client secret from developers.spotify.com]'
 
 username = '[your Spotify username]'
+
+
+The redirect_uri can be easily changed in the Main.py file if you wish to use a different one.
