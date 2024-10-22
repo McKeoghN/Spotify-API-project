@@ -3,7 +3,6 @@ from spotipy.oauth2 import SpotifyOAuth
 from pprint import pprint
 import numpy as np
 import time
-import itertools
 import Constants
 
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=Constants.cid, \
@@ -83,12 +82,14 @@ def main():
     arrays = []
     for i in range(num_arrays):
         arrays.append([])
+
     j = 0
     for i in range(num_songs - num_peaks):
         arrays[j].append(s_names[i])
         j += 1
         if j == num_arrays:
             j = 0
+
     x = 0
     print(peaks)
     for i in range(num_peaks):
@@ -98,7 +99,6 @@ def main():
     s_names = []
     for array in arrays:
         s_names.extend(array)
-    # pprint(arrays)
     pprint(s_names)
     np_s_names = np.array(s_names)
     create_new_playlist(np_s_names[:,1], p_names[playlist_input-1][0])
